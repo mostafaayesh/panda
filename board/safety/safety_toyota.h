@@ -42,8 +42,9 @@ addr_checks toyota_rx_checks = {toyota_addr_checks, TOYOTA_ADDR_CHECKS_LEN};
 // safety param flags
 // first two bytes are for eps factor, last two are for flags
 const uint32_t TOYOTA_PARAM_OFFSET = 16U;
-const uint32_t TOYOTA_EPS_FACTOR = (1U << TOYOTA_PARAM_OFFSET) - 1U;
-const uint32_t TOYOTA_ALT_BRAKE = 1U << TOYOTA_PARAM_OFFSET;
+// move belows to addr_checks to prevent compile error in C2
+//const uint32_t TOYOTA_EPS_FACTOR = (1U << TOYOTA_PARAM_OFFSET) - 1U;
+//const uint32_t TOYOTA_ALT_BRAKE = 1U << TOYOTA_PARAM_OFFSET;
 
 bool toyota_alt_brake = false;
 int toyota_dbc_eps_torque_factor = 100;   // conversion factor for STEER_TORQUE_EPS in %: see dbc file
@@ -253,6 +254,10 @@ static int toyota_tx_hook(CANPacket_t *to_send, bool longitudinal_allowed) {
 }
 
 static const addr_checks* toyota_init(uint32_t param) {
+  // fix compile error in c2
+  const uint32_t TOYOTA_EPS_FACTOR = (1U << TOYOTA_PARAM_OFFSET) - 1U;
+  const uint32_t TOYOTA_ALT_BRAKE = 1U << TOYOTA_PARAM_OFFSET;
+
   controls_allowed = 0;
   relay_malfunction_reset();
   gas_interceptor_detected = 0;
