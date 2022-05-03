@@ -264,7 +264,7 @@ static int toyota_tx_hook(CANPacket_t *to_send, bool longitudinal_allowed) {
   return tx;
 }
 
-static const addr_checks* toyota_init(uint32_t param) {
+static const addr_checks* toyota_init(uint16_t param) {
   // fix compile error in c2
   const uint32_t TOYOTA_EPS_FACTOR = (1U << TOYOTA_PARAM_OFFSET) - 1U;
   const uint32_t TOYOTA_PARAM_ALT_BRAKE = 1U << TOYOTA_PARAM_OFFSET;
