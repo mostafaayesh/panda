@@ -88,7 +88,7 @@ static uint32_t honda_compute_checksum(CANPacket_t *to_push) {
       checksum -= (byte & 0xFU);  // remove checksum in message
     }
   }
-  return (8U - checksum) & 0xFU;
+  return (uint8_t)((8U - checksum) & 0xFU);
 }
 
 static uint8_t honda_get_counter(CANPacket_t *to_push) {

@@ -52,7 +52,7 @@ static uint32_t chrysler_compute_checksum(CANPacket_t *to_push) {
       shift = shift >> 1;
     }
   }
-  return ~checksum;
+  return (uint8_t)(~checksum);
 }
 
 static uint8_t chrysler_get_counter(CANPacket_t *to_push) {
