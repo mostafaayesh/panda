@@ -142,6 +142,11 @@ struct sample_t angle_meas;         // last 6 steer angles
 // See ISO 15622:2018 for more information.
 #define ALT_EXP_RAISE_LONGITUDINAL_LIMITS_TO_ISO_MAX 8
 
+// Enable the ability to toggle LKAS and ACC independently of each other. Allows openpilot to be engaged 
+// after pressing the LKAS button
+
+#define ALT_EXP_ENABLE_LKAS_ONLY 16
+
 int alternative_experience = 0;
 
 // time since safety mode has been changed

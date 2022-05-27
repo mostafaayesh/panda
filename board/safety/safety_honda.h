@@ -60,6 +60,10 @@ enum {
   HONDA_BTN_RESUME = 4,
 };
 
+enum {
+  HONDA_BTN2_LKAS = 1,
+};
+
 int honda_brake = 0;
 bool honda_brake_switch_prev = false;
 bool honda_alt_brake_msg = false;
@@ -103,6 +107,8 @@ static int honda_rx_hook(CANPacket_t *to_push) {
 
   const bool pcm_cruise = ((honda_hw == HONDA_BOSCH) && !honda_bosch_long) || \
                           ((honda_hw == HONDA_NIDEC) && !gas_interceptor_detected);
+  
+  bool alt_exp_allow_lkas_only = alternative_experience & ALT_EXP_ENABLE_LKAS_ONLY;
 
   if (valid) {
     int addr = GET_ADDR(to_push);
@@ -144,12 +150,19 @@ static int honda_rx_hook(CANPacket_t *to_push) {
     // 0x1A6 for the ILX, 0x296 for the Civic Touring
     if (((addr == 0x1A6) || (addr == 0x296))) {
       int button = (GET_BYTE(to_push, 0) & 0xE0U) >> 5;
+      int button2 = ((GET_BYTE(to_push, (addr == 0x296) ? 0 : 5) & 0x0CU) >> 2);
 
       // exit controls once main or cancel are pressed
       if ((button == HONDA_BTN_MAIN) || (button == HONDA_BTN_CANCEL)) {
         controls_allowed = 0;
       }
 
+      if (alt_exp_allow_lkas_only) {
+        if ((button2 == HONDA_BTN2_LKAS) & acc_main_on) {
+          controls_allowed = 1;
+        }
+      }
+      
       // enter controls on the falling edge of set or resume
       bool set = (button == HONDA_BTN_NONE) && (cruise_button_prev == HONDA_BTN_SET);
       bool res = (button == HONDA_BTN_NONE) && (cruise_button_prev == HONDA_BTN_RESUME);
