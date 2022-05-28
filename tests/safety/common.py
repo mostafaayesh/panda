@@ -15,6 +15,7 @@ class UNSAFE_MODE:
   DISABLE_DISENGAGE_ON_GAS = 1
   DISABLE_STOCK_AEB = 2
   RAISE_LONGITUDINAL_LIMITS_TO_ISO_MAX = 8
+  ALLOW_LATERAL_ONLY = 16
 
 def package_can_msg(msg):
   addr, _, dat, bus = msg
