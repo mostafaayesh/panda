@@ -153,6 +153,17 @@ static int honda_rx_hook(CANPacket_t *to_push) {
       }
     }
 
+    bool unsafe_allow_lateral_only = unsafe_mode & UNSAFE_ALLOW_LATERAL_ONLY;
+    int button2 = ((GET_BYTE(to_push, (addr == 0x296) ? 0 : 5) & 0x0CU) >> 2);
+    if (unsafe_allow_lateral_only) {
+      if (button2 == 1) {
+        // lkas button
+        if (acc_main_on) {
+          controls_allowed = 1;
+        }
+      }
+    }
+    
     // user brake signal on 0x17C reports applied brake from computer brake on accord
     // and crv, which prevents the usual brake safety from working correctly. these
     // cars have a signal on 0x1BE which only detects user's brake being applied so
